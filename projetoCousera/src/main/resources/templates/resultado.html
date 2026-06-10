@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado – Quiz App</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 40px 20px; }
+        .container { max-width: 620px; margin: 0 auto; }
+        .score-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 28px;
+        }
+        .score-label { font-size: 0.85rem; font-weight: 700; color: #4361ee; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+        .score-number { font-size: 4rem; font-weight: 800; color: #1a1a2e; line-height: 1; margin-bottom: 8px; }
+        .score-total { font-size: 1rem; color: #999; margin-bottom: 20px; }
+        .score-msg { font-size: 1.1rem; color: #444; }
+        .result-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+        .result-item {
+            background: #fff;
+            border-radius: 10px;
+            padding: 18px 22px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 4px solid #ddd;
+        }
+        .result-item.correct { border-left-color: #2dc653; }
+        .result-item.wrong { border-left-color: #e63946; }
+        .result-question { font-weight: 600; color: #1a1a2e; margin-bottom: 8px; }
+        .result-detail { font-size: 0.88rem; color: #666; }
+        .result-detail span { font-weight: 600; }
+        .correct-answer { color: #2dc653; }
+        .wrong-answer { color: #e63946; }
+        .btn-retry {
+            display: block;
+            text-align: center;
+            padding: 13px;
+            background: #4361ee;
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .btn-retry:hover { background: #3451d1; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="score-card">
+        <div class="score-label">Seu resultado</div>
+        <div class="score-number" th:text="${score}">7</div>
+        <div class="score-total" th:text="'de ' + ${total} + ' perguntas'">de 10 perguntas</div>
+        <div class="score-msg" th:text="${message}">Bom trabalho!</div>
+    </div>
+
+    <div class="result-list">
+        <div th:each="result : ${results}"
+             th:classappend="${result.correct} ? 'correct' : 'wrong'"
+             class="result-item">
+            <div class="result-question" th:text="${result.questionText}">Pergunta</div>
+            <div class="result-detail">
+                Sua resposta:
+                <span th:classappend="${result.correct} ? 'correct-answer' : 'wrong-answer'"
+                      th:text="${result.userAnswer}">Resposta</span>
+                <span th:if="${!result.correct}">
+                    — Correto: <span class="correct-answer" th:text="${result.correctAnswer}">Certa</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <a th:href="@{/v1/Question/quiz}" class="btn-retry">Tentar novamente</a>
+</div>
+</body>
+</html>

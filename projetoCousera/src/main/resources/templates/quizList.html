@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Questionários – Admin</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 40px 20px; }
+        .container { max-width: 860px; margin: 0 auto; }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+        h1 { font-size: 1.8rem; color: #1a1a2e; }
+        .btn-add {
+            background: #4361ee;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .btn-add:hover { background: #3451d1; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+        th {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 14px 18px;
+            text-align: left;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        td { padding: 14px 18px; border-bottom: 1px solid #f0f0f0; color: #333; font-size: 0.95rem; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #f8f9ff; }
+        .actions { display: flex; gap: 10px; }
+        .btn-edit {
+            background: #f0f4ff;
+            color: #4361ee;
+            padding: 6px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .btn-delete {
+            background: #fff0f0;
+            color: #e63946;
+            padding: 6px 14px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .empty { text-align: center; padding: 40px; color: #999; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Questionários</h1>
+        <a th:href="@{/v1/Question/adicionarQuiz}" class="btn-add">+ Adicionar questionário</a>
+    </header>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Pergunta</th>
+                <th>Resposta correta</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Itera sobre a lista de perguntas passada pelo controller -->
+            <tr th:each="question : ${questions}">
+                <td th:text="${question.id}">1</td>
+                <td th:text="${question.questionText}">Pergunta aqui</td>
+                <td th:text="${question.correctAnswer}">Resposta</td>
+                <td>
+                    <div class="actions">
+                        <a th:href="@{/v1/Question/editQuiz(id=${question.id})}" class="btn-edit">Editar</a>
+                        <form th:action="@{/v1/Question/{id}(id=${question.id})}" method="post">
+                            <input type="hidden" name="_method" value="DELETE"/>
+                            <button class="btn-delete" type="submit">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(questions)}">
+                <td colspan="4" class="empty">Nenhum questionário cadastrado ainda.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

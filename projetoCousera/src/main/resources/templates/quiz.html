@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 40px 20px; }
+        .container { max-width: 680px; margin: 0 auto; }
+        h1 { font-size: 1.8rem; color: #1a1a2e; margin-bottom: 8px; }
+        p.subtitle { color: #666; margin-bottom: 32px; }
+        .question-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .question-number {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #4361ee;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 10px;
+        }
+        .question-text { font-size: 1.05rem; color: #1a1a2e; font-weight: 600; margin-bottom: 18px; }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border: 1.5px solid #e8e8e8;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .option:hover { border-color: #4361ee; background: #f8f9ff; }
+        .option input[type="radio"] { accent-color: #4361ee; width: 16px; height: 16px; }
+        .option label { cursor: pointer; font-size: 0.95rem; color: #333; }
+        .submit-area { text-align: center; margin-top: 10px; }
+        button[type="submit"] {
+            padding: 14px 48px;
+            background: #4361ee;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover { background: #3451d1; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Quiz</h1>
+    <p class="subtitle">Responda todas as perguntas e clique em Enviar.</p>
+
+    <form th:action="@{/v1/Question/responder}" method="post">
+        <div th:each="question : ${questions}" class="question-card">
+            <div class="question-number" th:text="'Pergunta ' + ${question.id}">Pergunta 1</div>
+            <div class="question-text" th:text="${question.questionText}">Texto da pergunta</div>
+
+            <div th:each="option : ${question.options}" class="option">
+                <input
+                    type="radio"
+                    th:id="${'q' + question.id + '_' + option}"
+                    th:name="${question.id}"
+                    th:value="${option}"
+                    required
+                />
+                <label th:for="${'q' + question.id + '_' + option}" th:text="${option}">Opção</label>
+            </div>
+        </div>
+
+        <div class="submit-area">
+            <button type="submit">Enviar respostas</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

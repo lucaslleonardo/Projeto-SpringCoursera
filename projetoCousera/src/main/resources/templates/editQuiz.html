@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Questionário</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 40px 20px; }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        h1 { font-size: 1.6rem; color: #1a1a2e; margin-bottom: 28px; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; color: #444; margin-bottom: 6px; }
+        input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            margin-bottom: 18px;
+            transition: border-color 0.2s;
+        }
+        input:focus { outline: none; border-color: #4361ee; }
+        .options-group { margin-bottom: 18px; }
+        .options-group label { margin-bottom: 10px; }
+        .option-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        .option-row input { margin-bottom: 0; flex: 1; }
+        .option-letter {
+            background: #f0f4ff;
+            color: #4361ee;
+            font-weight: 700;
+            border-radius: 6px;
+            padding: 10px 14px;
+            min-width: 40px;
+            text-align: center;
+            border: 1.5px solid #d0d8ff;
+        }
+        .actions { display: flex; gap: 12px; }
+        button[type="submit"] {
+            flex: 1;
+            padding: 12px;
+            background: #4361ee;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover { background: #3451d1; }
+        .btn-cancel {
+            flex: 1;
+            padding: 12px;
+            background: #f0f2f5;
+            color: #444;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Editar questionário</h1>
+
+    <form th:action="@{/v1/Question}" method="post">
+        <!-- Informa ao Spring que é um PUT -->
+        <input type="hidden" name="_method" value="PUT"/>
+        <input type="hidden" name="id" th:value="${question.id}"/>
+
+        <label for="questionText">Pergunta</label>
+        <input
+            type="text"
+            id="questionText"
+            name="questionText"
+            th:value="${question.questionText}"
+            required
+        />
+
+        <div class="options-group">
+            <label>Opções de resposta</label>
+            <div th:each="option, i : ${question.options}" class="option-row">
+                <span class="option-letter" th:text="${'ABCD'.charAt(i.index)}">A</span>
+                <input type="text" name="options" th:value="${option}" required />
+            </div>
+        </div>
+
+        <label for="correctAnswer">Resposta correta</label>
+        <input
+            type="text"
+            id="correctAnswer"
+            name="correctAnswer"
+            th:value="${question.correctAnswer}"
+            required
+        />
+
+        <div class="actions">
+            <a th:href="@{/v1/Question/admin/recuperarQuizz}" class="btn-cancel">Cancelar</a>
+            <button type="submit">Salvar alterações</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
