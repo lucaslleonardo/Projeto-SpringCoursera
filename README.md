@@ -83,7 +83,7 @@ Password:
 ### 1. Clone o projeto
 
 ```bash
-git clone https://github.com/lucaslleonardo/Projeto-SpringCousera.git
+git clone https://github.com/lucaslleonardo/Projeto-SpringCoursera.git
 ```
 
 ### 2. Entre na pasta
